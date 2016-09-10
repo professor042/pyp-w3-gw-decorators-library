@@ -44,15 +44,18 @@ def debug(fn, logger=None):
     return log_wrapper
 
 
-
+#COUNT_CALLS ----------------------------------------------------------------
 class count_calls(object):
     counter_dict = {}
     
     @staticmethod
     def reset_counters():
-        for key, value in count_calls.counter_dict.items():
-            value = 0
-            print("key = {} and value = {}".format(key, value))
+        count_calls.counter_dict = {}
+        # for key in count_calls.counter_dict.keys():
+        #     count_calls.counter_dict[key] = 0
+        # Reset counters actually needs to clear the entire dictionary to 
+        # pass test_count_no_calls rather than just reset the count of each
+        # function to zero (clear_functions or something might be better name)
     
     @staticmethod
     def counters():
@@ -60,24 +63,18 @@ class count_calls(object):
     
     def __init__(self, func):
         self.func = func
-        self.count = 0
         count_calls.counter_dict[self.func.__name__] = 0
-        
-    # def counter(self):
-    #     return count_calls.counter_dict[self.func.__name__]
-        
         
     def __call__(self, *args, **kwargs):
         '''Allows class to be called like a function'''
         # print("Got here test 1")
         # if self.func.__name__ in count_calls.counter_dict:
         count_calls.counter_dict[self.func.__name__] += 1
-        self.count += 1
-        
         return self.func(*args, **kwargs)
         
     def counter(self):
-        return self.count
+        # print("count={}".format(count_calls.counter_dict[self.func.__name__]))
+        return count_calls.counter_dict[self.func.__name__]
 
     def __repr__(self):
         '''Return the function's docstring.'''
@@ -87,6 +84,8 @@ class count_calls(object):
         '''Support instance methods'''
         return functools.partial(self.__call__, obj)
         
+        
+#MEMOIZED ------------------------------------------------------------------
 def memoized(fn):
     '''
     Adapted from:

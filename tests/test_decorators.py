@@ -61,6 +61,9 @@ class DecoratorsTestCase(unittest.TestCase):
         self.assertEqual(count_calls.counters(), {'my_func': 4})
         count_calls.reset_counters()
         # self.assertEqual(my_func.counter(), 0) # JLZ added
+        # Reset counters actually needs to clear the entire dictionary to 
+        # pass test_count_no_calls rather than just reset the count of each
+        # function to zero (clear_functions or something might be better name)
 
     def test_count_calls_multi_function(self):
         @count_calls
@@ -88,6 +91,7 @@ class DecoratorsTestCase(unittest.TestCase):
         self.assertEqual(my_func.counter(), 0)
         self.assertEqual(count_calls.counters(), {'my_func': 0})
         count_calls.reset_counters()
+        print(count_calls.counters()) # JLZ added
 
     def test_memoized(self):
         @memoized
