@@ -60,6 +60,7 @@ class DecoratorsTestCase(unittest.TestCase):
         self.assertEqual(my_func.counter(), 4)
         self.assertEqual(count_calls.counters(), {'my_func': 4})
         count_calls.reset_counters()
+        # self.assertEqual(my_func.counter(), 0) # JLZ added
 
     def test_count_calls_multi_function(self):
         @count_calls
